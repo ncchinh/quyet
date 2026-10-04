@@ -1,0 +1,10 @@
+name: tests
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - run: uv venv --python 3.12 && uv pip install --torch-backend=cpu "torch>=2.4" -e ".[test]"
+      - run: uv run --no-sync pytest -q

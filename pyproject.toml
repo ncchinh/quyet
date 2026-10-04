@@ -1,0 +1,51 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "quyet"
+version = "1.0.0"
+description = "Quyet decision models: pick one option for a state and a question, with calibrated probabilities."
+readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE"]
+authors = [{name = "Chinh Nguyen"}]
+keywords = ["decision model", "classification", "calibration", "llm", "encoder"]
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "License :: OSI Approved :: Apache Software License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+requires-python = ">=3.10"
+dependencies = [
+  "torch>=2.4",
+  "transformers>=5.17",
+  "safetensors>=0.4",
+  "huggingface_hub>=0.34",
+  "numpy>=1.26",
+]
+
+[project.urls]
+Homepage = "https://huggingface.co/chinhnc"
+Source = "https://github.com/ncchinh/quyet"
+Issues = "https://github.com/ncchinh/quyet/issues"
+
+[project.optional-dependencies]
+test = ["pytest>=8"]
+multi-gpu = ["accelerate>=1.0"]
+
+[project.scripts]
+quyet = "quyet.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/quyet"]
+
+[tool.hatch.build.targets.sdist]
+include = ["src/quyet", "tests", "README.md", "LICENSE", "NOTICE", "pyproject.toml"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
