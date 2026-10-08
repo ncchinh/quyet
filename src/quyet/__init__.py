@@ -2,5 +2,5 @@
 from .errors import QuestionError
 from .hub import load
 
-__version__ = "1.0.0"
+__version__ = "1.0.2"
 __all__ = ["QuestionError", "load", "__version__"]

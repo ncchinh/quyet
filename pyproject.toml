@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "quyet"
-version = "1.0.0"
+version = "1.0.2"
 description = "Quyet decision models: pick one option for a state and a question, with calibrated probabilities."
 readme = "README.md"
 license = "Apache-2.0"
@@ -30,7 +30,9 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://huggingface.co/chinhnc"
+Homepage = "https://quyet.ai"
+Demo = "https://quyet.ai/#demo"
+"Model weights" = "https://huggingface.co/chinhnc"
 Source = "https://github.com/ncchinh/quyet"
 Issues = "https://github.com/ncchinh/quyet/issues"
 
