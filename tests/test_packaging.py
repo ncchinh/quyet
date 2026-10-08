@@ -10,7 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 # internal paths must never ship (split so this file does not contain them); .superpowers files are kept out by the allowlist
 LEAK_MARKERS = ("/ho" + "me/", "/ro" + "ot/", "/tm" + "p/", "/work" + "space/")
 SDIST_ALLOWED = ("src/quyet/", "tests/", "README.md", "LICENSE", "NOTICE", "pyproject.toml", "PKG-INFO", ".gitignore")
-WHEEL_ALLOWED = ("quyet/", "quyet-1.0.1.dist-info/")
+WHEEL_ALLOWED = ("quyet/", "quyet-1.0.2.dist-info/")
 
 
 def _check(files, allowed):

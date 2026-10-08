@@ -6,6 +6,8 @@ generated: every answer is a probability distribution over the options you suppl
 
 This package is the runtime for all Quyet 1.0 models. The weights are on Hugging Face.
 
+**Live demo:** try Quyet-1.0-Large in your browser at [quyet.ai](https://quyet.ai).
+
 The models are built for English and also tuned for Vietnamese; other languages work, with lower accuracy. Small-EN is
 trained on English only.
 
