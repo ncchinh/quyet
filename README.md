@@ -98,4 +98,4 @@ when you redistribute this package, a model, or anything derived from them.
 }
 ```
 
-Questions and issues: [GitHub issues](https://github.com/ncchinh/quyet/issues) or email@chinh.com.
+Questions and issues: [GitHub issues](https://github.com/ncchinh/quyet/issues) or [email@quyet.ai](mailto:email@quyet.ai).
