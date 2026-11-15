@@ -13,12 +13,17 @@ def main(argv=None):
     ap = argparse.ArgumentParser(prog="quyet", description="Run a Quyet decision model.")
     sub = ap.add_subparsers(dest="cmd", required=True)
     p = sub.add_parser("predict", help="answer JSON-lines requests {state, questions}")
-    p.add_argument("model", help="Hugging Face repo id (e.g. chinhnc/Quyet-1.0-Small) or local directory")
+    p.add_argument("model", help="Hugging Face repo id or local directory (e.g. models/Quyet-1.2-Small)")
     p.add_argument("--input", help="JSON-lines file (default: stdin)")
     p.add_argument("--device", help="cpu, cuda, cuda:1, ... (default: cuda if available)")
     p.add_argument("--strict", action="store_true", help="fail instead of truncating a long state")
+    p.add_argument("--base", help="local pinned base weights for a format-2 adapter model")
+    p.add_argument("--prefix-cache", action="store_true", help="opt-in record-local prefix reuse for adapter and student models")
     a = ap.parse_args(argv)
-    model = load(a.model, device=a.device)
+    kw = {}
+    if a.base is not None: kw["base"] = a.base
+    if a.prefix_cache: kw["prefix_cache"] = True
+    model = load(a.model, device=a.device, **kw)
     failed = False
     src = open(a.input, encoding="utf8") if a.input else sys.stdin
     with src:

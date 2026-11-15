@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "quyet"
-version = "1.0.2"
+version = "1.2.0"
 description = "Quyet decision models: pick one option for a state and a question, with calibrated probabilities."
 readme = "README.md"
 license = "Apache-2.0"
@@ -39,6 +39,7 @@ Issues = "https://github.com/ncchinh/quyet/issues"
 [project.optional-dependencies]
 test = ["pytest>=8"]
 multi-gpu = ["accelerate>=1.0"]
+student = ["accelerate>=1.0"]
 
 [project.scripts]
 quyet = "quyet.cli:main"

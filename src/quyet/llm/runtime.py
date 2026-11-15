@@ -4,9 +4,9 @@ from __future__ import annotations
 from pathlib import Path
 
 from ..base import QuyetModel, Result, check_state, truncation_warning
-from ..calibration import softmax_t, temperature
+from ..calibration import softmax_t, temperature, uncalibrated_warnings
 from ..errors import QuestionError
-from ..questions import parse_questions
+from ..questions import parse_questions, option_limits
 from . import prompt as P
 
 
@@ -18,6 +18,7 @@ class LLMModel(QuyetModel):
         from transformers import AutoModelForCausalLM, AutoModelForImageTextToText, AutoTokenizer
         self.path, self.config = Path(path), config
         self.name = config["name"]
+        self.max_options = option_limits(config, choice_ceiling=10)
         self.tok = AutoTokenizer.from_pretrained(str(self.path))
         dtype = dtype or torch.bfloat16
         kw = dict(dtype=dtype) if device_map is None else dict(dtype=dtype, device_map=device_map)
@@ -96,8 +97,9 @@ class LLMModel(QuyetModel):
         prepared = []
         for r in requests:
             check_state(r["state"])
-            decisions = parse_questions(r["questions"])
+            decisions = parse_questions(r["questions"], self.max_options)
             ids, truncated, warnings = self._prompt_ids(r["state"], decisions, strict)
+            warnings.extend(uncalibrated_warnings(decisions, self.temps))
             prepared.append((decisions, ids, truncated, warnings))
         seqs = [(x, len(d.labels)) for decisions, ids, _, _ in prepared for d, x in zip(decisions.values(), ids)]
         logits = iter(self._letter_logits(seqs))

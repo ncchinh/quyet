@@ -5,6 +5,7 @@ Licensed under the Apache License, Version 2.0 (see LICENSE). Redistributions of
 
 This work includes or derives from:
 - Gemma 4 by Google (Apache-2.0): https://huggingface.co/google/gemma-4-31B-it (revision 842da3794eaa)
+- Gemma 4 by Google (Apache-2.0): https://huggingface.co/google/gemma-4-E4B-it (revision 4ecc2ba63bca)
 - Qwen3.5 by Alibaba Cloud (Apache-2.0): https://huggingface.co/Qwen/Qwen3.5-4B (revision 851bf6e806ef)
 - SEA-LION-ModernBERT-300M by AI Singapore (MIT; Copyright 2023 AI Singapore): https://huggingface.co/aisingapore/SEA-LION-ModernBERT-300M (revision e3d70b810769)
 
