@@ -73,3 +73,37 @@ def write_llm_export(path, qwen_tok_dir, temperatures=None, prompt_version=1):
            "base_model": {"repo": QWEN[0], "revision": QWEN[1], "layers_kept": None}, "source": {}}
     (path / "quyet_config.json").write_text(json.dumps(cfg))
     return path
+
+from pathlib import Path
+import pytest
+
+
+def pytest_addoption(parser):
+    parser.addoption('--release-models',default=None)
+    parser.addoption('--legacy-reference',default=None)
+    parser.addoption('--legacy-llm-reference',default=None)
+
+
+@pytest.fixture(scope='session')
+def model_root(request):
+    supplied=request.config.getoption('--release-models')
+    if not supplied:pytest.skip('Pass --release-models to run tests requiring release model files')
+    path=Path(supplied)
+    if not path.is_dir():pytest.skip('Built release model folders are not available')
+    return path
+
+
+@pytest.fixture(scope='session')
+def legacy_reference(request):
+    import json
+    path=request.config.getoption('--legacy-reference')
+    if not path or not Path(path).is_file():pytest.skip('Separate-process legacy reference is not available')
+    return json.loads(Path(path).read_text())
+
+
+@pytest.fixture(scope='session')
+def legacy_llm_reference(request):
+    import json
+    path=request.config.getoption('--legacy-llm-reference')
+    if not path or not Path(path).is_file():pytest.skip('Separate-process legacy LLM reference is not available')
+    return json.loads(Path(path).read_text())

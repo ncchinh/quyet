@@ -17,3 +17,12 @@ def softmax_t(logits, t):
     z = np.asarray(logits, np.float64) / t
     p = np.exp(z - z.max())
     return (p / p.sum()).tolist()
+
+
+def uncalibrated_warnings(decisions, temps):
+    """Warn only for wider choices that use the implicit temperature default."""
+    return [{"code": "uncalibrated_option_count", "question": qid,
+             "options": len(d.labels), "temperature": temperature(temps, d.type, len(d.labels))}
+            for qid, d in decisions.items()
+            if d.type == "choice" and len(d.labels) > 10
+            and f"choice:{size_bucket(len(d.labels))}" not in temps and "choice" not in temps]

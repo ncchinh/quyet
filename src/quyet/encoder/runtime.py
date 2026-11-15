@@ -5,9 +5,9 @@ from __future__ import annotations
 from pathlib import Path
 
 from ..base import QuyetModel, Result, check_state, truncation_warning
-from ..calibration import softmax_t, temperature
+from ..calibration import softmax_t, temperature, uncalibrated_warnings
 from ..errors import QuestionError
-from ..questions import parse_questions
+from ..questions import parse_questions, option_limits
 from . import inputs as I
 from .modeling import build_model
 
@@ -20,6 +20,7 @@ class EncoderModel(QuyetModel):
         from transformers import AutoTokenizer
         self.path, self.config, self.device = Path(path), config, str(device)
         self.name = config["name"]
+        self.max_options = option_limits(config)
         self.max_len = int(config["max_len"])
         self.temps = dict(config.get("temperatures") or {})
         self.max_batch_tokens, self.max_batch_rows = 32768, 256
@@ -47,7 +48,7 @@ class EncoderModel(QuyetModel):
         for r in requests:
             state = r["state"]
             check_state(state)
-            decisions = parse_questions(r["questions"])
+            decisions = parse_questions(r["questions"], self.max_options)
             state_ids = self.tokens.encode(I.serialize_state(state))
             items = {qid: I.build_item(self.tokens, d, state_ids, isinstance(state, list), self.max_len)
                      for qid, d in decisions.items()}
@@ -59,6 +60,7 @@ class EncoderModel(QuyetModel):
                                         f"window (strict)")
                 warnings.append(truncation_warning(state, len(state_ids),
                                                    min(it["kept_state_tokens"] for it in items.values())))
+            warnings.extend(uncalibrated_warnings(decisions, self.temps))
             prepared.append((decisions, items, truncated, warnings))
         logits = iter(self._logits([it for _, items, _, _ in prepared for it in items.values()]))
         results = []
